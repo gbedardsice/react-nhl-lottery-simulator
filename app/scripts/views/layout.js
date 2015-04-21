@@ -35,6 +35,7 @@ var Layout = React.createClass({
     return (
       <div>
         <div className="jumbotron">
+          <h1>NHL Lottery Simulator</h1>
           <div className="btn-group">
             <button onClick={this.draw} className="btn btn-success">Draw</button>
             <button onClick={this.reset} className="btn btn-danger">Reset</button>

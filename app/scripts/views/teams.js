@@ -6,7 +6,7 @@ var React = require('react'),
 var Combination = React.createClass({
   render: function() {
     return (
-      <div className="col-md-3 col-xs-12">
+      <div className="col-md-3 col-xs-6">
         {this.props.numbers.map(function(number) {
           return <span className="badge">{number}</span>;
         })}
