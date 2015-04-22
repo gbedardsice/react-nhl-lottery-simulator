@@ -1,12 +1,13 @@
 'use strict';
 
 var React = require('react'),
-    teams = require('../constants/teams.json');
+    _ = require('lodash'),
+    TEAMS = require('../constants/teams.json');
 
 var Combination = React.createClass({
   render: function() {
     return (
-      <div className="col-md-3 col-xs-6">
+      <div className="col-md-2 col-xs-6">
         {this.props.numbers.map(function(number) {
           return <span className="badge">{number}</span>;
         })}
@@ -26,31 +27,45 @@ function getCombinations(combinations, drawn) {
 var Team = React.createClass({
   render: function() {
     return (
-        <div className="panel panel-default">
-          <div className="panel-heading">
-            <h3 className="panel-title">{this.props.name}</h3>
-          </div>
-          <div className="panel-body">
-            <div className="row">
-              {getCombinations(this.props.combinations, this.props.drawn).map(function(combination) {
-                return <Combination numbers={combination}/>
-              })}
-            </div>
+      <div className="panel panel-default">
+        <div className="panel-heading">
+          <h3 className="panel-title">{this.props.model.name}</h3>
+        </div>
+        <div className="panel-body">
+          <div className="row">
+            {this.props.model.combinations.map(function(combination) {
+              return <Combination numbers={combination}/>
+            })}
           </div>
         </div>
+      </div>
     );
   }
 });
 
 var Teams = React.createClass({
+  getTeams: function() {
+    return _(TEAMS).chain()
+      .map(function(team) {
+        return _.extend({}, team, {
+          combinations: getCombinations(team.combinations, this.props.drawn)
+        });
+      }, this)
+      .filter(function(team) {
+        return !!team.combinations.length;
+      })
+      .sortBy(function(team) {
+        return -team.combinations.length;
+      })
+      .value();
+  },
+
   render: function() {
     return (
       <div>
-        {teams.filter(function(team) {
-          return !!getCombinations(team.combinations, this.props.drawn).length;
-        }.bind(this)).map(function(team) {
-          return <Team combinations={team.combinations} name={team.name} drawn={this.props.drawn}/>
-        }.bind(this))}
+        {this.getTeams().map(function(team) {
+          return <Team model={team}/>
+        })}
       </div>
     );
   }

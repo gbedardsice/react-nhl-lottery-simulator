@@ -153,8 +153,6 @@ gulp.task('watch', ['html', 'fonts', 'bundle'], function() {
 
     gulp.watch(['app/styles/**/*.scss', 'app/styles/**/*.css'], ['styles', reload]);
 
-
-
     // Watch image files
     gulp.watch('app/images/**/*', reload);
 });
